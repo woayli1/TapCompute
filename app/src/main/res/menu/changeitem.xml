@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/man_item"
+        android:title="男主" />
+    <item
+        android:id="@+id/woman_item"
+        android:title="女主"/>
+    <item
+        android:id="@+id/compute"
+        android:title="计算关卡"/>
+    <item
+        android:id="@+id/grade"
+        android:title="计算等级"/>
+</menu>

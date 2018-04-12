@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">Tap Compute</string>
+    <string-array name="items_man">
+        <item>救世主盾牌</item>
+        <item>蛮族气概</item>
+        <item>世外盔甲</item>
+        <item>工人垂饰</item>
+        <item>活命黑斗篷</item>
+        <item>富足宝箱</item>
+        <item>末日亡灵</item>
+        <item>猎人膏药</item>
+        <item>看守人药水</item>
+        <item>沃伦斯护身符</item>
+        <item>未知灵气</item>
+        <item>王者之蛋</item>
+        <item>神奇魔力之戒</item>
+        <item>宇宙裂痕</item>
+        <item>坚毅之斧</item>
+        <item>战士复活</item>
+        <item>醉汉榔头</item>
+        <item>未来财富</item>
+        <item>英雄突刺</item>
+        <item>天神之药</item>
+        <item>工匠灵药</item>
+        <item>绝世羊皮纸</item>
+        <item>食人怪臂铠</item>
+        <item>神圣卷轴</item>
+        <item>救世灵灯</item>
+        <item>骑士盾牌</item>
+        <item>财富之戒</item>
+        <item>神圣酒杯</item>
+        <item>圣贤盾牌</item>
+        <item>吸收药酒</item>
+    </string-array>
+
+    <string-array name="man_atc">
+        <item>90%</item>
+        <item>120%</item>
+        <item>150%</item>
+        <item>180%</item>
+        <item>210%</item>
+        <item>360%</item>
+        <item>3500%</item>
+    </string-array>
+
+    <string-array name="items_woman">
+        <item>法师头蓬</item>
+        <item>埃及艳后的王冠</item>
+        <item>重生凤凰</item>
+        <item>魔法迷雾</item>
+        <item>活力灵丹</item>
+        <item>冰霜之瓶</item>
+        <item>迅捷劣酒</item>
+        <item>墨丘利的耳环</item>
+        <item>约束发带</item>
+        <item>灭之珠</item>
+        <item>火炎指环</item>
+        <item>太阳神指环</item>
+        <item>原子之杖</item>
+        <item>权势印符</item>
+        <item>苍龙石雕</item>
+        <item>折射之镜</item>
+        <item>幸运铁蹄</item>
+        <item>疯狂圣甲虫</item>
+        <item>宇宙蜡烛</item>
+        <item>喀耳刻的镜子</item>
+        <item>莫甘娜的高脚杯</item>
+        <item>醉酒刀刃</item>
+        <item>电击手套</item>
+        <item>雷电卷轴</item>
+        <item>神迹之杖</item>
+        <item>梅林之球</item>
+        <item>潘多拉的音乐盒</item>
+        <item>恶魔之角</item>
+        <item>幽冥项链</item>
+        <item>寒冰圣杯</item>
+        <item>枯萎之靴</item>
+        <item>阿佛洛狄忒的权杖</item>
+        <item>圣油药膏</item>
+        <item>风暴护符</item>
+        <item>巫师水晶</item>
+        <item>防护花瓣</item>
+        <item>狂风之杆</item>
+        <item>鞭挞之剑</item>
+        <item>睡眠拖鞋</item>
+        <item>美狄亚的竖琴</item>
+    </string-array>
+
+</resources>
