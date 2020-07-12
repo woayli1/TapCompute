@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -17,14 +16,14 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "TapCompute";
     private static final int DATABASE_VERSION = 1;
 
-    protected static final String TAP_NAME = "tap_name";
-    protected static final String TAP_ATTACK = "tap_attack";
-    protected static final String TAP_COST = "tap_cost";
+    private static final String TAP_NAME = "tap_name";
+    private static final String TAP_ATTACK = "tap_attack";
+    private static final String TAP_COST = "tap_cost";
 
-    public static final String TABLE_NAME_MAN = "tap_man";
-    public static final String TABLE_NAME_WOMAN = "tap_woman";
+    private static final String TABLE_NAME_MAN = "tap_man";
+    private static final String TABLE_NAME_WOMAN = "tap_woman";
 
-    public DataHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    DataHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
 
@@ -39,9 +38,9 @@ public class DataHelper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList getSelectStringItem(String table_name, String items) {
+    ArrayList getSelectStringItem(String table_name, String items) {
         SQLiteDatabase db = getReadableDatabase();
-        ArrayList<String> itme = new ArrayList<String>();
+        ArrayList<String> itme = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM '" + table_name + "' order by tap_attack/tap_cost DESC;", null);
         int names = cursor.getColumnIndex(items);
         while (cursor.moveToNext()) {
@@ -50,14 +49,14 @@ public class DataHelper extends SQLiteOpenHelper {
         return itme;
     }
 
-    public void insertinto(String table_name, String tap_name, String tap_atc, String tap_cost) {
+    void insertinto(String table_name, String tap_name, String tap_atc, String tap_cost) {
         SQLiteDatabase db = getWritableDatabase();
         Float tap_at=Float.parseFloat(tap_atc);
         Float tap_cos=Float.parseFloat(tap_cost);
         db.execSQL("insert into " + table_name + " values ('" + tap_name + "','" + tap_at + "','" + tap_cos + "');");
     }
 
-    public void delete(String table_name, String tap_name, String tap_atc) {
+    void delete(String table_name, String tap_name, String tap_atc) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + table_name + " WHERE " + TAP_NAME + " = '" + tap_name + "' AND " + TAP_ATTACK + " = '" + tap_atc + "';");
     }

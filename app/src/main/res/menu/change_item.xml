@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/man_item"
-        android:title="男主" />
+        android:title="@string/change_item_man" />
     <item
         android:id="@+id/woman_item"
-        android:title="女主"/>
+        android:title="@string/change_item_woman" />
     <item
         android:id="@+id/compute"
-        android:title="计算关卡"/>
+        android:title="@string/change_item_calculate_levels" />
     <item
         android:id="@+id/grade"
-        android:title="计算等级"/>
+        android:title="@string/change_item_calculate_level" />
 </menu>

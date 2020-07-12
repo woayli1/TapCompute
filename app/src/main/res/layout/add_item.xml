@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/additem"
+    android:id="@+id/add_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -16,7 +16,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="14dp"
         android:layout_marginStart="14dp"
-        android:text="项目名称" />
+        android:text="@string/add_item_item_name" />
 
     <Spinner
         android:id="@+id/editText"
@@ -38,7 +38,7 @@
         android:layout_alignBottom="@+id/editText2"
         android:layout_toLeftOf="@+id/editText"
         android:layout_toStartOf="@+id/editText"
-        android:text="攻击力" />
+        android:text="@string/add_item_damage" />
 
     <EditText
         android:id="@+id/editText2"
@@ -48,7 +48,7 @@
         android:layout_alignStart="@+id/editText3"
         android:layout_below="@+id/editText"
         android:ems="10"
-        android:hint="请输入攻击力" />
+        android:hint="@string/add_item_input_damage" />
 
     <TextView
         android:id="@+id/textView13"
@@ -58,7 +58,7 @@
         android:layout_alignBottom="@+id/editText3"
         android:layout_alignEnd="@+id/textView10"
         android:layout_alignRight="@+id/textView10"
-        android:text="项目花费" />
+        android:text="@string/add_item_item_cost" />
 
     <EditText
         android:id="@+id/editText3"
@@ -68,7 +68,6 @@
         android:layout_alignStart="@+id/editText"
         android:layout_below="@+id/editText2"
         android:ems="10"
-        android:hint="请输入项目花费"
-        />
+        android:hint="@string/add_item_input_item_cost" />
 
 </RelativeLayout>

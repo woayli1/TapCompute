@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tap Compute</string>
+    <string name="app_name">Tap</string>
     <string-array name="items_man">
         <item>救世主盾牌</item>
         <item>蛮族气概</item>
@@ -85,5 +85,29 @@
         <item>睡眠拖鞋</item>
         <item>美狄亚的竖琴</item>
     </string-array>
+
+    <!-- activity screen start -->
+    <string name="activity_refresh">刷新</string>
+    <string name="activity_add">添加</string>
+    <string name="activity_name">姓名</string>
+    <string name="activity_damage">攻击力</string>
+    <string name="activity_cost">花费</string>
+    <string name="activity_value">价值</string>
+    <!-- activity screen end -->
+
+    <!-- add_item screen start -->
+    <string name="add_item_item_name">项目名称</string>
+    <string name="add_item_damage">攻击力</string>
+    <string name="add_item_input_damage">请输入攻击力</string>
+    <string name="add_item_item_cost">项目花费</string>
+    <string name="add_item_input_item_cost">请输入项目花费</string>
+    <!-- activity screen start -->
+
+    <!-- change_item screen start -->
+    <string name="change_item_man">男主</string>
+    <string name="change_item_woman">女主</string>
+    <string name="change_item_calculate_levels">计算关卡</string>
+    <string name="change_item_calculate_level">计算等级</string>
+    <!-- activity screen start -->
 
 </resources>

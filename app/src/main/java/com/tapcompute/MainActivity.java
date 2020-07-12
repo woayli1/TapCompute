@@ -3,23 +3,19 @@ package com.tapcompute;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.text.AndroidCharacter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,8 +26,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
+    private String TAG = "MainActivity";
+
     public static String status = "tap_man"; //判断界面状态
-    Intent t = new Intent();
 
     DataHelper dataHelper;
 
@@ -58,34 +55,35 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         if (status.equals("tap_man")) {
-            showmessgae("当前为男主");
+            showMessage("当前为男主");
         } else {
-            showmessgae("当前为女主");
+            showMessage("当前为女主");
         }
         dataHelper = new DataHelper(this, "TapCompute", null, 1);
-        refush();
+        refresh();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.changeitem, menu);
+        getMenuInflater().inflate(R.menu.change_item, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.woman_item:
-                showmessgae("女主");
+                showMessage("女主");
                 status = "tap_woman";
-                refush();
+                refresh();
                 break;
             case R.id.man_item:
-                showmessgae("男主");
+                showMessage("男主");
                 status = "tap_man";
-                refush();
+                refresh();
                 break;
             case R.id.compute:
                 dialog3();
@@ -98,37 +96,37 @@ public class MainActivity extends Activity {
     }
 
     public void onSelectClick(View view) {
-        showmessgae("已刷新");
-        refush();
+        showMessage("已刷新");
+        refresh();
     }
 
     public void onAddClick(View view) {
         dialog();
     }
 
-    public void showmessgae(String message) {
+    public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        return;
+        Log.d(TAG, "弹出的消息：" + message);
     }
 
     public void dialog() {
         final LayoutInflater inflater = getLayoutInflater();
-        final View layout = inflater.inflate(R.layout.additem, (ViewGroup) findViewById(R.id.additem));
+        final View layout = inflater.inflate(R.layout.add_item, (ViewGroup) findViewById(R.id.add_item));
 
-        editText = (Spinner) layout.findViewById(R.id.editText); //获取输入的项目名称
-        editText2 = (EditText) layout.findViewById(R.id.editText2); //获取输入的攻击力
-        editText3 = (EditText) layout.findViewById(R.id.editText3); //获取输入的项目花费
+        editText = layout.findViewById(R.id.editText); //获取输入的项目名称
+        editText2 = layout.findViewById(R.id.editText2); //获取输入的攻击力
+        editText3 = layout.findViewById(R.id.editText3); //获取输入的项目花费
 
         Resources res = getResources();
         String[] ite_man = res.getStringArray(R.array.items_man);
         String[] ite_woman = res.getStringArray(R.array.items_woman);
 
         if (status.equals("tap_man")) {
-            adapter_man = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, ite_man);
+            adapter_man = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, ite_man);
             adapter_man.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             editText.setAdapter(adapter_man);
         } else if (status.equals("tap_woman")) {
-            adapter_woman = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, ite_woman);
+            adapter_woman = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, ite_woman);
             adapter_woman.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             editText.setAdapter(adapter_woman);
         }
@@ -146,14 +144,14 @@ public class MainActivity extends Activity {
                         String tap_atc = editText2.getText().toString();
                         String tap_cost = editText3.getText().toString();
                         if (tap_atc.trim().equals("") || tap_cost.trim().equals("") || tap_atc.trim().equals(".") || tap_cost.trim().equals(".")) {
-                            showmessgae("请输入具体数据");
+                            showMessage("请输入具体数据");
                             preventDismissDialog();
                         } else {
                             dataHelper.insertinto(status, tap_name, tap_atc, tap_cost);
                             //dialog.dismiss();
                             dismissDialog();
-                            showmessgae("添加成功");
-                            refush();
+                            showMessage("添加成功");
+                            refresh();
                         }
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -172,34 +170,34 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dataHelper.delete(status, i, j);
-                showmessgae("删除成功");
-                refush();
+                showMessage("删除成功");
+                refresh();
                 dialog.dismiss();
             }
         }).setNegativeButton("取消", null).show();
     }
 
-    public void refush() {
-        items_name = new ArrayList<String>();
-        items_name2 = new ArrayList<String>();
-        items_name3 = new ArrayList<String>();
+    public void refresh() {
+        items_name = new ArrayList<>();
+        items_name2 = new ArrayList<>();
+        items_name3 = new ArrayList<>();
         items_name = dataHelper.getSelectStringItem(status, "tap_name");
         items_name2 = dataHelper.getSelectStringItem(status, "tap_attack");
         items_name3 = dataHelper.getSelectStringItem(status, "tap_cost");
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView textView = (TextView) view.findViewById(R.id.textView);
-                TextView textView2 = (TextView) view.findViewById(R.id.textView2);
+                TextView textView = view.findViewById(R.id.textView);
+                TextView textView2 = view.findViewById(R.id.textView2);
                 String str = textView.getText().toString();
                 String str2 = textView2.getText().toString();
                 dialog2(str, str2);
             }
         });
-        RefushItem refushItem = new RefushItem(this);
-        listView.setAdapter(refushItem);
+        RefreshItem refreshItem = new RefreshItem(this);
+        listView.setAdapter(refreshItem);
         if (listView.getCount() == 0) {
-            showmessgae("无数据，请添加");
+            showMessage("无数据，请添加");
         }
     }
 
@@ -212,6 +210,7 @@ public class MainActivity extends Activity {
             field.setAccessible(true);
             field.set(alertDialog, true);
         } catch (Exception e) {
+            Log.d(TAG, "关闭对话框 get err:" + e);
         }
         alertDialog.dismiss();
     }
@@ -226,7 +225,7 @@ public class MainActivity extends Activity {
             //设置mShowing值，欺骗android系统
             field.set(alertDialog, false);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d(TAG, "阻止关闭对话框 get err:" + e);
         }
     }
 
@@ -241,18 +240,18 @@ public class MainActivity extends Activity {
                     b = Integer.parseInt(editText1.getText().toString().trim());
                     a = true;
                 } catch (Exception e) {
-                    showmessgae("请输入整数");
+                    showMessage("请输入整数");
                     a = false;
                 }
                 if (b < 80) {
-                    showmessgae("请完成90关卡后再进行计算");
+                    showMessage("请完成90关卡后再进行计算");
                     preventDismissDialog();
                 } else if (a) {
                     int c = (b - 90) / 15 + 1;
                     int d = 15 - (b - 90) % 15;
-                    refush();
+                    refresh();
                     dismissDialog();
-                    dialog4(c,d,"关卡");
+                    dialog4(c, d, "关卡");
                 } else {
                     preventDismissDialog();
                 }
@@ -265,12 +264,13 @@ public class MainActivity extends Activity {
         }).show();
     }
 
-    public void dialog4(final int i, final int j,final String s) {
+    public void dialog4(final int i, final int j, final String s) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("当前的蜕变量为: " + i + " ,还需" + j + s +"满足下一要求");
+        builder.setMessage("当前的蜕变量为: " + i + " ,还需" + j + s + "满足下一要求");
         builder.setTitle("蜕变量");
-        builder.setPositiveButton("确认",null).setNegativeButton("关闭", null).show();
+        builder.setPositiveButton("确认", null).setNegativeButton("关闭", null).show();
     }
+
     public void dialog5() {  //计算英雄等级蜕变量
         final EditText editText1 = new EditText(this);
         editText1.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -282,18 +282,18 @@ public class MainActivity extends Activity {
                     b = Integer.parseInt(editText1.getText().toString().trim());
                     a = true;
                 } catch (Exception e) {
-                    showmessgae("请输入整数");
+                    showMessage("请输入整数");
                     a = false;
                 }
                 if (b < 500) {
-                    showmessgae("请达到500级后再进行计算");
+                    showMessage("请达到500级后再进行计算");
                     preventDismissDialog();
                 } else if (a) {
                     int c = (b - 500) / 1000 + 1;
                     int d = 1000 - (b - 500) % 1000;
-                    refush();
+                    refresh();
                     dismissDialog();
-                    dialog4(c,d,"级");
+                    dialog4(c, d, "级");
                 } else {
                     preventDismissDialog();
                 }
