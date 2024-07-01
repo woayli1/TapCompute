@@ -26,8 +26,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
-    private String TAG = "MainActivity";
-
+    private final String TAG = "MainActivity";
+    private static final String DATABASE_NAME = "TapCompute";
     public static String status = "tap_man"; //判断界面状态
 
     DataHelper dataHelper;
@@ -41,15 +41,12 @@ public class MainActivity extends Activity {
     boolean a = false;  //用于判断输入的关卡是否为整数
     int b; //接收输入的关卡
 
-    TextView textView;
     AlertDialog alertDialog;
 
     ArrayAdapter<String> adapter_man;
     ArrayAdapter<String> adapter_woman;
 
-    public static ArrayList<String> items_name;
-    public static ArrayList<String> items_name2;
-    public static ArrayList<String> items_name3;
+    public ArrayList<String> items_name, items_name2, items_name3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +58,7 @@ public class MainActivity extends Activity {
         } else {
             showMessage("当前为女主");
         }
-        dataHelper = new DataHelper(this, "TapCompute", null, 1);
+        dataHelper = new DataHelper(getApplicationContext(), DATABASE_NAME, null, 1);
         refresh();
     }
 
@@ -105,7 +102,7 @@ public class MainActivity extends Activity {
     }
 
     public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
         Log.d(TAG, "弹出的消息：" + message);
     }
 
@@ -122,18 +119,18 @@ public class MainActivity extends Activity {
         String[] ite_woman = res.getStringArray(R.array.items_woman);
 
         if (status.equals("tap_man")) {
-            adapter_man = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, ite_man);
+            adapter_man = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, ite_man);
             adapter_man.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             editText.setAdapter(adapter_man);
         } else if (status.equals("tap_woman")) {
-            adapter_woman = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, ite_woman);
+            adapter_woman = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, ite_woman);
             adapter_woman.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             editText.setAdapter(adapter_woman);
         }
 
         editText2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         editText3.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        alertDialog = new AlertDialog.Builder(this).setView(layout).setTitle("添加新项目").setPositiveButton("添加",
+        alertDialog = new AlertDialog.Builder(getApplicationContext()).setView(layout).setTitle("添加新项目").setPositiveButton("添加",
 
                 new DialogInterface.OnClickListener() {
 
@@ -147,7 +144,7 @@ public class MainActivity extends Activity {
                             showMessage("请输入具体数据");
                             preventDismissDialog();
                         } else {
-                            dataHelper.insertinto(status, tap_name, tap_atc, tap_cost);
+                            dataHelper.insertInto(status, tap_name, tap_atc, tap_cost);
                             //dialog.dismiss();
                             dismissDialog();
                             showMessage("添加成功");
@@ -163,7 +160,7 @@ public class MainActivity extends Activity {
     }
 
     public void dialog2(final String i, final String j) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         builder.setMessage("确认删除吗？");
         builder.setTitle(i);
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
@@ -194,7 +191,7 @@ public class MainActivity extends Activity {
                 dialog2(str, str2);
             }
         });
-        RefreshItem refreshItem = new RefreshItem(this);
+        RefreshItem refreshItem = new RefreshItem(items_name, items_name2, items_name3);
         listView.setAdapter(refreshItem);
         if (listView.getCount() == 0) {
             showMessage("无数据，请添加");
@@ -230,10 +227,10 @@ public class MainActivity extends Activity {
     }
 
     public void dialog3() {  //计算关卡蜕变量
-        final EditText editText1 = new EditText(this);
+        final EditText editText1 = new EditText(getApplicationContext());
         editText1.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText1.setGravity(Gravity.CENTER);
-        alertDialog = new AlertDialog.Builder(this).setTitle("请输入当前关卡").setView(editText1).setPositiveButton("计算", new DialogInterface.OnClickListener() {
+        alertDialog = new AlertDialog.Builder(getApplicationContext()).setTitle("请输入当前关卡").setView(editText1).setPositiveButton("计算", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
@@ -265,17 +262,17 @@ public class MainActivity extends Activity {
     }
 
     public void dialog4(final int i, final int j, final String s) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         builder.setMessage("当前的蜕变量为: " + i + " ,还需" + j + s + "满足下一要求");
         builder.setTitle("蜕变量");
         builder.setPositiveButton("确认", null).setNegativeButton("关闭", null).show();
     }
 
     public void dialog5() {  //计算英雄等级蜕变量
-        final EditText editText1 = new EditText(this);
+        final EditText editText1 = new EditText(getApplicationContext());
         editText1.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText1.setGravity(Gravity.CENTER);
-        alertDialog = new AlertDialog.Builder(this).setTitle("请输入当前等级").setView(editText1).setPositiveButton("计算", new DialogInterface.OnClickListener() {
+        alertDialog = new AlertDialog.Builder(getApplicationContext()).setTitle("请输入当前等级").setView(editText1).setPositiveButton("计算", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {

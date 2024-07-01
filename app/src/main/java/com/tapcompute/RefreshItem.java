@@ -14,21 +14,13 @@ import java.util.ArrayList;
  */
 
 public class RefreshItem extends BaseAdapter {
-    private Context context;
-    private ArrayList<String> items,items2,items3;
+    private final ArrayList<String> items, items2, items3;
 
-    TextView textView;  //用于接收项目名称
-    TextView textView2; //用于接收攻击力
-    TextView textView3; //用于接收项目花费
-    TextView textView4; //用于接收项目性价比
-
-    RefreshItem(Context context){
-        this.context=context;
-        items=MainActivity.items_name;
-        items2=MainActivity.items_name2;
-        items3=MainActivity.items_name3;
+    RefreshItem(ArrayList<String> items, ArrayList<String> items2, ArrayList<String> items3) {
+        this.items = items;
+        this.items2 = items2;
+        this.items3 = items3;
     }
-
 
     @Override
     public int getCount() {
@@ -47,24 +39,23 @@ public class RefreshItem extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.content_view, null);
-        textView= view.findViewById(R.id.textView);
-        textView2= view.findViewById(R.id.textView2);
-        textView3= view.findViewById(R.id.textView3);
-        textView4= view.findViewById(R.id.textView4);
+        TextView textView = view.findViewById(R.id.textView); //用于接收项目名称
+        TextView textView2 = view.findViewById(R.id.textView2); //用于接收攻击力
+        TextView textView3 = view.findViewById(R.id.textView3); //用于接收项目花费
+        TextView textView4 = view.findViewById(R.id.textView4); //用于接收项目性价比
 
-        String items_name= items.get(position);
-        String items_name2= items2.get(position);
-        String items_name3= items3.get(position);
+        String items_name = items.get(position);
+        String items_name2 = items2.get(position);
+        String items_name3 = items3.get(position);
         textView.setText(items_name);
         textView2.setText(items_name2);
         textView3.setText(items_name3);
 
-        float a=Float.parseFloat(items_name2);
-        float b=Float.parseFloat(items_name3);
-        String c=Float.toString(a/b);
+        float a = Float.parseFloat(items_name2);
+        float b = Float.parseFloat(items_name3);
+        String c = Float.toString(a / b);
         textView4.setText(c);
 
         return view;

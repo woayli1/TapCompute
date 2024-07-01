@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class DataHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "TapCompute";
     private static final int DATABASE_VERSION = 1;
 
     private static final String TAP_NAME = "tap_name";
@@ -24,7 +23,7 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME_WOMAN = "tap_woman";
 
     DataHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        super(context, name, factory, DATABASE_VERSION);
     }
 
     @Override
@@ -38,21 +37,23 @@ public class DataHelper extends SQLiteOpenHelper {
 
     }
 
-    ArrayList getSelectStringItem(String table_name, String items) {
+    public ArrayList<String> getSelectStringItem(String table_name, String items) {
         SQLiteDatabase db = getReadableDatabase();
-        ArrayList<String> itme = new ArrayList<>();
+        ArrayList<String> item = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM '" + table_name + "' order by tap_attack/tap_cost DESC;", null);
         int names = cursor.getColumnIndex(items);
         while (cursor.moveToNext()) {
-            itme.add(cursor.getString(names));
+            item.add(cursor.getString(names));
         }
-        return itme;
+        db.close();
+        cursor.close();
+        return item;
     }
 
-    void insertinto(String table_name, String tap_name, String tap_atc, String tap_cost) {
+    void insertInto(String table_name, String tap_name, String tap_atc, String tap_cost) {
         SQLiteDatabase db = getWritableDatabase();
-        Float tap_at=Float.parseFloat(tap_atc);
-        Float tap_cos=Float.parseFloat(tap_cost);
+        float tap_at = Float.parseFloat(tap_atc);
+        float tap_cos = Float.parseFloat(tap_cost);
         db.execSQL("insert into " + table_name + " values ('" + tap_name + "','" + tap_at + "','" + tap_cos + "');");
     }
 
