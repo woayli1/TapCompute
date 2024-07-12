@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/man_item"
-        android:title="@string/change_item_man" />
-    <item
-        android:id="@+id/woman_item"
-        android:title="@string/change_item_woman" />
-    <item
-        android:id="@+id/compute"
+        android:id="@+id/item_stage"
         android:title="@string/change_item_calculate_levels" />
     <item
-        android:id="@+id/grade"
+        android:id="@+id/item_level"
         android:title="@string/change_item_calculate_level" />
 </menu>

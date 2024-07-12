@@ -1,4 +1,4 @@
-package com.tapcompute;
+package com.tapCompute;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

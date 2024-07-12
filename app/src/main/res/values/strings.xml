@@ -87,6 +87,7 @@
     </string-array>
 
     <!-- activity screen start -->
+    <string name="activity_jump">跳转</string>
     <string name="activity_refresh">刷新</string>
     <string name="activity_add">添加</string>
     <string name="activity_name">姓名</string>

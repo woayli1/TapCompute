@@ -1,4 +1,4 @@
-package com.tapcompute;
+package com.tapCompute;
 
 import org.junit.Test;
 

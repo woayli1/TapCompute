@@ -1,4 +1,4 @@
-package com.tapcompute;
+package com.gc.tapCompute.data;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2017/6/3.
+ * Created by gc on 2017/6/3.
  */
 
 public class DataHelper extends SQLiteOpenHelper {
@@ -22,7 +22,7 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME_MAN = "tap_man";
     private static final String TABLE_NAME_WOMAN = "tap_woman";
 
-    DataHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public DataHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, DATABASE_VERSION);
     }
 
@@ -30,6 +30,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME_MAN + " (" + TAP_NAME + " VARCHAR, " + TAP_ATTACK + " FLOAT, " + TAP_COST + " FLOAT);");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME_WOMAN + " (" + TAP_NAME + " VARCHAR, " + TAP_ATTACK + " FLOAT, " + TAP_COST + "  FLOAT);");
+        db.close();
     }
 
     @Override
@@ -50,15 +51,17 @@ public class DataHelper extends SQLiteOpenHelper {
         return item;
     }
 
-    void insertInto(String table_name, String tap_name, String tap_atc, String tap_cost) {
+    public void insertInto(String table_name, String tap_name, String tap_atc, String tap_cost) {
         SQLiteDatabase db = getWritableDatabase();
         float tap_at = Float.parseFloat(tap_atc);
         float tap_cos = Float.parseFloat(tap_cost);
         db.execSQL("insert into " + table_name + " values ('" + tap_name + "','" + tap_at + "','" + tap_cos + "');");
+        db.close();
     }
 
-    void delete(String table_name, String tap_name, String tap_atc) {
+    public void delete(String table_name, String tap_name, String tap_atc) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + table_name + " WHERE " + TAP_NAME + " = '" + tap_name + "' AND " + TAP_ATTACK + " = '" + tap_atc + "';");
+        db.close();
     }
 }
