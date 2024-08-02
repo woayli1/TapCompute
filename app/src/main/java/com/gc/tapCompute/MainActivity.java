@@ -42,13 +42,10 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case R.id.item_stage:
-                countStageDialog();
-                break;
-            case R.id.item_level:
-                countLevelDialog();
-                break;
+        if (item.getItemId() == R.id.item_stage) {
+            countStageDialog();
+        } else if (item.getItemId() == R.id.item_level) {
+            countLevelDialog();
         }
         return true;
     }
@@ -56,50 +53,50 @@ public class MainActivity extends FragmentActivity {
     //计算关卡
     private void countStageDialog() {
         new XPopup.Builder(this).asInputConfirm("计算关卡", "请输入当前关卡",
-                new OnInputConfirmListener() {
-                    @Override
-                    public void onConfirm(String text) {
-                        try {
-                            mStage = Integer.parseInt(text);
-                            isInt = true;
-                        } catch (Exception e) {
-                            ToastUtils.showShort("请输入整数");
-                            isInt = false;
-                        }
-                        if (mStage < 90) {
-                            ToastUtils.showShort("请完成90关卡后再进行计算");
-                        } else if (isInt) {
-                            int c = (mStage - 90) / 15 + 1;
-                            int d = 15 - (mStage - 90) % 15;
-                            msgDialog(c, d, "关卡");
-                        }
-                    }
-                })
+                        new OnInputConfirmListener() {
+                            @Override
+                            public void onConfirm(String text) {
+                                try {
+                                    mStage = Integer.parseInt(text);
+                                    isInt = true;
+                                } catch (Exception e) {
+                                    ToastUtils.showShort("请输入整数");
+                                    isInt = false;
+                                }
+                                if (mStage < 90) {
+                                    ToastUtils.showShort("请完成90关卡后再进行计算");
+                                } else if (isInt) {
+                                    int c = (mStage - 90) / 15 + 1;
+                                    int d = 15 - (mStage - 90) % 15;
+                                    msgDialog(c, d, "关卡");
+                                }
+                            }
+                        })
                 .show();
     }
 
     private void countLevelDialog() {
         new XPopup.Builder(this).asInputConfirm("计算等级", "请输入当前等级",
-                new OnInputConfirmListener() {
-                    @Override
-                    public void onConfirm(String text) {
-                        int mLevel = 0;
-                        try {
-                            mLevel = Integer.parseInt(text);
-                            isInt = true;
-                        } catch (Exception e) {
-                            ToastUtils.showShort("请输入整数");
-                            isInt = false;
-                        }
-                        if (mLevel < 500) {
-                            ToastUtils.showShort("请达到500级后再进行计算");
-                        } else if (isInt) {
-                            int c = (mLevel - 500) / 1000 + 1;
-                            int d = 1000 - (mLevel - 500) % 1000;
-                            msgDialog(c, d, "级");
-                        }
-                    }
-                })
+                        new OnInputConfirmListener() {
+                            @Override
+                            public void onConfirm(String text) {
+                                int mLevel = 0;
+                                try {
+                                    mLevel = Integer.parseInt(text);
+                                    isInt = true;
+                                } catch (Exception e) {
+                                    ToastUtils.showShort("请输入整数");
+                                    isInt = false;
+                                }
+                                if (mLevel < 500) {
+                                    ToastUtils.showShort("请达到500级后再进行计算");
+                                } else if (isInt) {
+                                    int c = (mLevel - 500) / 1000 + 1;
+                                    int d = 1000 - (mLevel - 500) % 1000;
+                                    msgDialog(c, d, "级");
+                                }
+                            }
+                        })
                 .show();
     }
 
