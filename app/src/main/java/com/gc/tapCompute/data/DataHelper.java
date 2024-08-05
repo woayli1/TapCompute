@@ -13,8 +13,6 @@ import java.util.ArrayList;
 
 public class DataHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
-
     private static final String TAP_NAME = "tap_name";
     private static final String TAP_ATTACK = "tap_attack";
     private static final String TAP_COST = "tap_cost";
@@ -23,14 +21,13 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME_WOMAN = "tap_woman";
 
     public DataHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, DATABASE_VERSION);
+        super(context, name, factory, version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME_MAN + " (" + TAP_NAME + " VARCHAR, " + TAP_ATTACK + " FLOAT, " + TAP_COST + " FLOAT);");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME_WOMAN + " (" + TAP_NAME + " VARCHAR, " + TAP_ATTACK + " FLOAT, " + TAP_COST + "  FLOAT);");
-        db.close();
     }
 
     @Override
