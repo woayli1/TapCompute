@@ -17,13 +17,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.gc.tapCompute.R;
-import com.gc.tapCompute.adapter.OnItemClickListener;
 import com.gc.tapCompute.adapter.RefreshItemAdapter;
 import com.gc.tapCompute.bean.DataBean;
 import com.gc.tapCompute.data.DataHelper;
 import com.gc.tapCompute.view.AddPopup;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.OnConfirmListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +46,7 @@ public class ChildFragment extends Fragment {
     public static String statusTag = "tapName";
 
     private String dataBaseName = "TapCompute";
-    private static String dataBaseNameTag = "Tap_Compute";
+    private static final String dataBaseNameTag = "Tap_Compute";
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
@@ -84,7 +82,7 @@ public class ChildFragment extends Fragment {
         }
         if (rootView != null) {
             context = getContext();
-            onBindView(savedInstanceState, rootView);
+            onBindView(rootView);
         }
         return rootView;
     }
@@ -93,7 +91,7 @@ public class ChildFragment extends Fragment {
         return R.layout.fragment_child;
     }
 
-    private void onBindView(Bundle savedInstanceState, View rootView) {
+    private void onBindView(View rootView) {
         Bundle bundle = getArguments();
         if (bundle != null) {
             status = bundle.getString(statusTag);
@@ -104,29 +102,18 @@ public class ChildFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recycler_view);
         btAdd = rootView.findViewById(R.id.bt_add);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(false);
-                setData();
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            swipeRefreshLayout.setRefreshing(false);
+            setData();
         });
 
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addDialog();
-            }
-        });
+        btAdd.setOnClickListener(view -> addDialog());
 
         addPopup = new AddPopup(context, status);
-        addPopup.setOnConfirmClick(new AddPopup.PopupBackData() {
-            @Override
-            public void onConfirmClick(String tapName, String tapAttack, String tapCost) {
-                dataHelper.insertInto(status, tapName, tapAttack, tapCost);
-                ToastUtils.showShort("添加成功");
-                setData();
-            }
+        addPopup.setOnConfirmClick((tapName, tapAttack, tapCost) -> {
+            dataHelper.insertInto(status, tapName, tapAttack, tapCost);
+            ToastUtils.showShort("添加成功");
+            setData();
         });
 
         dataHelper = new DataHelper(context, dataBaseName, null, 1);
@@ -145,17 +132,37 @@ public class ChildFragment extends Fragment {
         }
 
         refreshItemAdapter = new RefreshItemAdapter(context, dataBeanList);
-        refreshItemAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, long itemId) {
-                String strName = refreshItemAdapter.getDate().get(position).getName();
-                String strAttack = refreshItemAdapter.getDate().get(position).getAttack();
-                deleteDialog(position, strName, strAttack);
-            }
+        refreshItemAdapter.setOnItemClickListener((position, itemId) -> {
+            String strName = refreshItemAdapter.getDate().get(position).getName();
+            String strAttack = refreshItemAdapter.getDate().get(position).getAttack();
+            deleteDialog(position, strName, strAttack);
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(refreshItemAdapter);
 
+        setBtAddText();
+
+        if (refreshItemAdapter.getItemCount() == 0) {
+            ToastUtils.showShort("无数据，请添加");
+        }
+
+    }
+
+    public void addDialog() {
+        new XPopup.Builder(getContext()).asCustom(addPopup).show();
+    }
+
+    public void deleteDialog(int position, String strName, String strAttack) {
+        new XPopup.Builder(getContext()).asConfirm(strName, "确认删除吗？", () -> {
+            dataHelper.delete(status, strName, strAttack);
+            ToastUtils.showShort("删除成功");
+            dataBeanList.remove(position);
+            refreshItemAdapter.notifyItemRemoved(position);
+            setBtAddText();
+        }).show();
+    }
+
+    private void setBtAddText() {
         if (ObjectUtils.isNotEmpty(btAdd)) {
             String addText;
 
@@ -165,37 +172,11 @@ public class ChildFragment extends Fragment {
                 addText = "女主添加";
             }
 
-            if (dataBeanList.size() > 0) {
+            if (!dataBeanList.isEmpty()) {
                 addText = addText + "(" + dataBeanList.size() + "个)";
             }
             btAdd.setText(addText);
         }
-
-        if (refreshItemAdapter.getItemCount() == 0) {
-            ToastUtils.showShort("无数据，请添加");
-        }
-
     }
-
-    public void addDialog() {
-        new XPopup.Builder(getContext())
-                .asCustom(addPopup)
-                .show();
-    }
-
-    public void deleteDialog(int position, String strName, String strAttack) {
-        new XPopup.Builder(getContext()).asConfirm(strName, "确认删除吗？",
-                new OnConfirmListener() {
-                    @Override
-                    public void onConfirm() {
-                        dataHelper.delete(status, strName, strAttack);
-                        ToastUtils.showShort("删除成功");
-                        dataBeanList.remove(position);
-                        refreshItemAdapter.notifyDataSetChanged();
-                    }
-                })
-                .show();
-    }
-
 
 }

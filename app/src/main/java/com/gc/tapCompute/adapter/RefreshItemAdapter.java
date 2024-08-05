@@ -43,12 +43,9 @@ public class RefreshItemAdapter extends RecyclerView.Adapter<RefreshItemAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull RefreshItemHolder holder, int position) {
-        holder.llItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ObjectUtils.isNotEmpty(onItemClickListener)) {
-                    onItemClickListener.onItemClick(position, 0);
-                }
+        holder.llItem.setOnClickListener(view -> {
+            if (ObjectUtils.isNotEmpty(onItemClickListener)) {
+                onItemClickListener.onItemClick(holder.getAbsoluteAdapterPosition(), 0);
             }
         });
 
@@ -83,7 +80,7 @@ public class RefreshItemAdapter extends RecyclerView.Adapter<RefreshItemAdapter.
         this.onItemClickListener = onItemClickListener;
     }
 
-    protected static class RefreshItemHolder extends RecyclerView.ViewHolder {
+    public static class RefreshItemHolder extends RecyclerView.ViewHolder {
         LinearLayout llItem;
         TextView tvName, tvAttack, tvCost, tvValue;
 
