@@ -2,7 +2,6 @@ package com.gc.tapCompute.view;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -28,6 +27,10 @@ public class AddPopup extends CenterPopupView {
     private EditText etAttack, etCost;
     private PopupBackData mPopupBackData;
     public String tapName = "tap_man";
+
+    public AddPopup(@NonNull Context context) {
+        super(context);
+    }
 
     public AddPopup(@NonNull @NotNull Context context, String tapName) {
         super(context);
@@ -65,25 +68,18 @@ public class AddPopup extends CenterPopupView {
 //        etAttack.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 //        etCost.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-        findViewById(R.id.tv_cancel).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss(); // 关闭弹窗
-            }
-        });
+        //关闭弹窗
+        findViewById(R.id.tv_cancel).setOnClickListener(v -> dismiss());
 
-        findViewById(R.id.tv_confirm).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tapName = etName.getSelectedItem().toString();
-                String tapAttack = etAttack.getText().toString();
-                String tapCost = etCost.getText().toString();
-                if (tapName.trim().equals("") || tapCost.trim().equals("") || tapAttack.trim().equals(".") || tapCost.trim().equals(".")) {
-                    ToastUtils.showShort("请输入具体数据");
-                } else if (ObjectUtils.isNotEmpty(mPopupBackData)) {
-                    mPopupBackData.onConfirmClick(tapName, tapAttack, tapCost);
-                    dismiss();
-                }
+        findViewById(R.id.tv_confirm).setOnClickListener(v -> {
+            String tapName = etName.getSelectedItem().toString();
+            String tapAttack = etAttack.getText().toString();
+            String tapCost = etCost.getText().toString();
+            if (tapName.trim().isEmpty() || tapCost.trim().isEmpty() || tapAttack.trim().equals(".") || tapCost.trim().equals(".")) {
+                ToastUtils.showShort("请输入具体数据");
+            } else if (ObjectUtils.isNotEmpty(mPopupBackData)) {
+                mPopupBackData.onConfirmClick(tapName, tapAttack, tapCost);
+                dismiss();
             }
         });
     }

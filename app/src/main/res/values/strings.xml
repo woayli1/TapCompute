@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tap</string>
+    <string name="app_name">Tap Titans</string>
     <string-array name="items_man">
         <item>救世主盾牌</item>
         <item>蛮族气概</item>
@@ -109,6 +109,7 @@
     <string name="change_item_woman">女主</string>
     <string name="change_item_calculate_levels">计算关卡</string>
     <string name="change_item_calculate_level">计算等级</string>
+    <string name="addItem">添加项目</string>
     <!-- activity screen start -->
 
 </resources>
