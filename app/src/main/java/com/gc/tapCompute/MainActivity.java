@@ -52,7 +52,7 @@ public class MainActivity extends FragmentActivity {
 
     //计算关卡
     private void countStageDialog() {
-        new XPopup.Builder(this).asInputConfirm("计算关卡", "请输入当前关卡", text -> {
+        new XPopup.Builder(this).asInputConfirm("计算关卡", "请输入当前关卡", null, null, text -> {
             try {
                 mStage = Integer.parseInt(text);
                 isInt = true;
@@ -67,11 +67,11 @@ public class MainActivity extends FragmentActivity {
                 int d = 15 - (mStage - 90) % 15;
                 msgDialog(c, d, "关卡");
             }
-        }).show();
+        }, null, R.layout.popup_center_impl_confirm).show();
     }
 
     private void countLevelDialog() {
-        new XPopup.Builder(this).asInputConfirm("计算等级", "请输入当前等级", text -> {
+        new XPopup.Builder(this).asInputConfirm("计算等级", "请输入当前等级", null, null, text -> {
             int mLevel;
             try {
                 mLevel = Integer.parseInt(text);
@@ -89,7 +89,7 @@ public class MainActivity extends FragmentActivity {
                 int d = 1000 - (mLevel - 500) % 1000;
                 msgDialog(c, d, "级");
             }
-        }).show();
+        }, null, R.layout.popup_center_impl_confirm).show();
     }
 
     public void msgDialog(final int i, final int j, final String s) {
