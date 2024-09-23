@@ -94,6 +94,7 @@
     <string name="activity_damage">攻击力</string>
     <string name="activity_cost">花费</string>
     <string name="activity_value">价值</string>
+    <string name="activity_loading">加载中…</string>
     <!-- activity screen end -->
 
     <!-- add_item screen start -->

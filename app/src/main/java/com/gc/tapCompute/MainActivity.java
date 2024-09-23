@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.gc.tapCompute.frgament.ChildFragment;
 import com.lxj.xpopup.XPopup;
@@ -31,19 +32,12 @@ public class MainActivity extends FragmentActivity {
         ViewPager2 viewPager = findViewById(R.id.view_pager);
         ScreenSlidePagerAdapter slidePagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(slidePagerAdapter);
+    }
 
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                String title = getResources().getString(R.string.app_name);
-                if (position == 0) {
-                    title = " " + title + "    男主";
-                } else {
-                    title = " " + title + "    女主";
-                }
-                setTitle(title);
-            }
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BarUtils.setNavBarLightMode(getWindow(), true);
     }
 
     @Override
