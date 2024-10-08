@@ -1,5 +1,7 @@
 package com.gc.tapCompute;
 
+import android.app.UiModeManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +36,8 @@ public class MainActivity extends FragmentActivity {
 
     boolean isInt = false;  //用于判断输入的关卡是否为整数
     private int mStage; //接收输入的关卡
+
+    private boolean isNight = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +83,19 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        BarUtils.setNavBarLightMode(getWindow(), true);
+
+        UiModeManager uiModeManager = (UiModeManager) getApplicationContext().getSystemService(Context.UI_MODE_SERVICE);
+        isNight = uiModeManager.getNightMode() == UiModeManager.MODE_NIGHT_YES;
+
+        BarUtils.setNavBarLightMode(getWindow(), !isNight);
+        BarUtils.setStatusBarLightMode(getWindow(), !isNight);
 
         AttachPopupView attachPopupView = new XPopup.Builder(this)
                 .hasStatusBarShadow(false)
 //                        .isRequestFocus(false)
                 .isCoverSoftInput(true)
                 .hasShadowBg(false)
+                .isDarkTheme(isNight)
                 .atView(ivMore)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
                 .asAttachList(new String[]{getResources().getString(R.string.change_item_calculate_levels),
                                 getResources().getString(R.string.change_item_calculate_level),
@@ -129,51 +139,54 @@ public class MainActivity extends FragmentActivity {
 
     //计算关卡
     private void countStageDialog() {
-        new XPopup.Builder(this).asInputConfirm("计算关卡", "请输入当前关卡", null, null, text -> {
-            try {
-                mStage = Integer.parseInt(text);
-                isInt = true;
-            } catch (Exception e) {
-                ToastUtils.showShort("请输入整数");
-                isInt = false;
-            }
-            if (mStage < 90) {
-                ToastUtils.showShort("请完成90关卡后再进行计算");
-            } else if (isInt) {
-                int c = (mStage - 90) / 15 + 1;
-                int d = 15 - (mStage - 90) % 15;
-                msgDialog(c, d, "关卡");
-            }
-        }, null, R.layout.popup_center_impl_confirm).show();
+        new XPopup.Builder(this)
+                .asInputConfirm("计算关卡", "请输入当前关卡", null, null, text -> {
+                    try {
+                        mStage = Integer.parseInt(text);
+                        isInt = true;
+                    } catch (Exception e) {
+                        ToastUtils.showShort("请输入整数");
+                        isInt = false;
+                    }
+                    if (mStage < 90) {
+                        ToastUtils.showShort("请完成90关卡后再进行计算");
+                    } else if (isInt) {
+                        int c = (mStage - 90) / 15 + 1;
+                        int d = 15 - (mStage - 90) % 15;
+                        msgDialog(c, d, "关卡");
+                    }
+                }, null, R.layout.popup_center_impl_confirm).show();
     }
 
     //计算等级
     private void countLevelDialog() {
-        new XPopup.Builder(this).asInputConfirm("计算等级", "请输入当前等级", null, null, text -> {
-            int mLevel;
-            try {
-                mLevel = Integer.parseInt(text);
-                isInt = true;
-            } catch (Exception e) {
-                ToastUtils.showShort("请输入整数");
-                isInt = false;
-                return;
-            }
+        new XPopup.Builder(this)
+                .asInputConfirm("计算等级", "请输入当前等级", null, null, text -> {
+                    int mLevel;
+                    try {
+                        mLevel = Integer.parseInt(text);
+                        isInt = true;
+                    } catch (Exception e) {
+                        ToastUtils.showShort("请输入整数");
+                        isInt = false;
+                        return;
+                    }
 
-            if (mLevel < 500) {
-                ToastUtils.showShort("请达到500级后再进行计算");
-            } else {
-                int c = (mLevel - 500) / 1000 + 1;
-                int d = 1000 - (mLevel - 500) % 1000;
-                msgDialog(c, d, "级");
-            }
-        }, null, R.layout.popup_center_impl_confirm).show();
+                    if (mLevel < 500) {
+                        ToastUtils.showShort("请达到500级后再进行计算");
+                    } else {
+                        int c = (mLevel - 500) / 1000 + 1;
+                        int d = 1000 - (mLevel - 500) % 1000;
+                        msgDialog(c, d, "级");
+                    }
+                }, null, R.layout.popup_center_impl_confirm).show();
     }
 
     public void msgDialog(final int i, final int j, final String s) {
         String title = "蜕变量";
         String msg = "当前的蜕变级别为: " + i + " ,还需" + j + s + "满足下一要求";
-        new XPopup.Builder(this).asConfirm(title, msg, "", "确认", null, null, true).show();
+        new XPopup.Builder(this).isDarkTheme(isNight)
+                .asConfirm(title, msg, "", "确认", null, null, true).show();
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStateAdapter {

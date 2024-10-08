@@ -132,7 +132,7 @@ public class ChildFragment extends Fragment {
 
     }
 
-    public void onConfirmClick(String tapName, String tapAttack, String tapCost){
+    public void onConfirmClick(String tapName, String tapAttack, String tapCost) {
         dataHelper.insertInto(status, tapName, tapAttack, tapCost);
         ToastUtils.showShort("添加成功");
         dataBeanList.add(new DataBean(tapName, tapAttack, tapCost));
