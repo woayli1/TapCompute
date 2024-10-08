@@ -3,7 +3,10 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorBlack2">#85000000</color>
+    <color name="colorBlack3">#70000000</color>
     <color name="colorGrey">#dcdcdc</color>
     <color name="colorGrey2">#F5F5F5</color>
+    <color name="colorGrey3">#C8C8C8</color>
     <color name="colorTransparent">#00000000</color>
 </resources>

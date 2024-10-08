@@ -110,7 +110,7 @@
     <string name="change_item_woman">女主</string>
     <string name="change_item_calculate_levels">计算关卡</string>
     <string name="change_item_calculate_level">计算等级</string>
-    <string name="addItem">添加项目</string>
+    <string name="change_item_calculate_addItem">添加项目</string>
     <!-- activity screen start -->
 
 </resources>

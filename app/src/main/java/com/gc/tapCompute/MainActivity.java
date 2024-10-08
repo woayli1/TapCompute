@@ -1,25 +1,36 @@
 package com.gc.tapCompute;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.blankj.utilcode.util.BarUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.gc.tapCompute.frgament.ChildFragment;
+import com.gc.tapCompute.view.AddPopup;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.AttachPopupView;
 
 import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends FragmentActivity {
 
     private static final String dataBaseName = "TapCompute";
+
+    private TextView tvTitle;
+    private ImageView ivMore;
+
+    private ChildFragment tapMan, tapWoman;
+
+    //当前页面位置
+    private int currentPosition = 0;
+    private ViewPager2 viewPager;
 
     boolean isInt = false;  //用于判断输入的关卡是否为整数
     private int mStage; //接收输入的关卡
@@ -29,32 +40,91 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewPager2 viewPager = findViewById(R.id.view_pager);
+        tvTitle = findViewById(R.id.tv_title);
+        ivMore = findViewById(R.id.iv_more);
+
+        viewPager = findViewById(R.id.view_pager);
         ScreenSlidePagerAdapter slidePagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(slidePagerAdapter);
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+
+                float appWidth = (float) (ScreenUtils.getAppScreenWidth() - 60) / 2;
+                float alpha = Math.abs((appWidth - positionOffsetPixels) / appWidth);
+
+                tvTitle.setAlpha(alpha);
+
+                if (positionOffsetPixels >= appWidth) {
+                    tvTitle.setText(R.string.change_item_woman);
+                } else if (alpha != 1) {
+                    tvTitle.setText(R.string.change_item_man);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                currentPosition = position;
+                if (position == 1) {
+                    tvTitle.setText(R.string.change_item_woman);
+                } else {
+                    tvTitle.setText(R.string.change_item_man);
+                }
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         BarUtils.setNavBarLightMode(getWindow(), true);
+
+        AttachPopupView attachPopupView = new XPopup.Builder(this)
+                .hasStatusBarShadow(false)
+//                        .isRequestFocus(false)
+                .isCoverSoftInput(true)
+                .hasShadowBg(false)
+                .atView(ivMore)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
+                .asAttachList(new String[]{getResources().getString(R.string.change_item_calculate_levels),
+                                getResources().getString(R.string.change_item_calculate_level),
+                                getResources().getString(R.string.change_item_calculate_addItem),
+                        },
+                        new int[]{},
+                        (position, text) -> {
+                            if (viewPager.getScrollState() == ViewPager2.SCROLL_STATE_DRAGGING) {
+                                ToastUtils.showShort("正在滑动，无法弹窗");
+                                return;
+                            }
+
+                            if (position == 0) {
+                                countStageDialog();
+                            } else if (position == 1) {
+                                countLevelDialog();
+                            } else if (position == 2) {
+                                addDialog();
+                            }
+                        }, 0, 0/*, Gravity.LEFT*/);
+
+        ivMore.setOnClickListener(view -> attachPopupView.show());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.change_item, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        super.onOptionsItemSelected(item);
-        if (item.getItemId() == R.id.item_stage) {
-            countStageDialog();
-        } else if (item.getItemId() == R.id.item_level) {
-            countLevelDialog();
+    public void addDialog() {
+        String status = "tap_man";
+        if (currentPosition == 1) {
+            status = "tap_woman";
         }
-        return true;
+        AddPopup addPopup = new AddPopup(this, status);
+        addPopup.setOnConfirmClick((tapName, tapAttack, tapCost) -> {
+            if (currentPosition == 1) {
+                tapWoman.onConfirmClick(tapName, tapAttack, tapCost);
+            } else {
+                tapMan.onConfirmClick(tapName, tapAttack, tapCost);
+            }
+        });
+
+        new XPopup.Builder(getApplicationContext()).asCustom(addPopup).show();
     }
 
     //计算关卡
@@ -77,6 +147,7 @@ public class MainActivity extends FragmentActivity {
         }, null, R.layout.popup_center_impl_confirm).show();
     }
 
+    //计算等级
     private void countLevelDialog() {
         new XPopup.Builder(this).asInputConfirm("计算等级", "请输入当前等级", null, null, text -> {
             int mLevel;
@@ -105,7 +176,7 @@ public class MainActivity extends FragmentActivity {
         new XPopup.Builder(this).asConfirm(title, msg, "", "确认", null, null, true).show();
     }
 
-    private static class ScreenSlidePagerAdapter extends FragmentStateAdapter {
+    private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
         private static final int NUM_PAGES = 2;
 
         public ScreenSlidePagerAdapter(FragmentActivity fa) {
@@ -116,9 +187,11 @@ public class MainActivity extends FragmentActivity {
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) {
-                return ChildFragment.create(dataBaseName, "tap_man");
+                tapMan = ChildFragment.create(dataBaseName, "tap_man");
+                return tapMan;
             }
-            return ChildFragment.create(dataBaseName, "tap_woman");
+            tapWoman = ChildFragment.create(dataBaseName, "tap_woman");
+            return tapWoman;
         }
 
         @Override

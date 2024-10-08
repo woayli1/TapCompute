@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
         android:gravity="center"
-        android:paddingVertical="5dp" />
+        android:paddingVertical="5dp"
+        android:textColor="@color/_xpopup_content_color" />
 
     <TextView
         android:id="@+id/tv_attack"
@@ -22,7 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center"
-        android:paddingVertical="5dp" />
+        android:paddingVertical="5dp"
+        android:textColor="@color/_xpopup_content_color" />
 
     <TextView
         android:id="@+id/tv_cost"
@@ -30,7 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center"
-        android:paddingVertical="5dp" />
+        android:paddingVertical="5dp"
+        android:textColor="@color/_xpopup_content_color" />
 
     <TextView
         android:id="@+id/tv_value"
@@ -38,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center"
-        android:paddingVertical="5dp" />
+        android:paddingVertical="5dp"
+        android:textColor="@color/_xpopup_content_color" />
 
 </LinearLayout>

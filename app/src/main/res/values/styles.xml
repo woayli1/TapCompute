@@ -1,29 +1,17 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorWhite</item>
-        <item name="colorPrimaryDark">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorBlack</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/colorWhite</item>
         <item name="android:statusBarColor">@color/colorWhite</item>
-
-        <item name="android:popupMenuStyle">@style/PopupMenuBgStyle</item>
-        <item name="android:dropDownListViewStyle">@style/PopupMenuDivider</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>
     </style>
 
     <style name="WelcomeTheme" parent="AppTheme">
         <item name="android:background">@color/colorWhite</item>
     </style>
-
-    <style name="PopupMenuBgStyle" parent="@android:style/Widget.PopupMenu">
-        <item name="android:popupBackground">@color/colorGrey2</item>
-    </style>
-
-    <style name="PopupMenuDivider">
-        <item name="android:divider">@color/colorBlack</item>
-        <item name="android:dividerHeight">1sp</item>
-    </style>
-
 
 </resources>

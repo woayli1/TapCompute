@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,7 +24,6 @@ import com.gc.tapCompute.R;
 import com.gc.tapCompute.adapter.RefreshItemAdapter;
 import com.gc.tapCompute.bean.DataBean;
 import com.gc.tapCompute.data.DataHelper;
-import com.gc.tapCompute.view.AddPopup;
 import com.lxj.xpopup.XPopup;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,19 +52,14 @@ public class ChildFragment extends Fragment {
     private static final String dataBaseNameTag = "Tap_Compute";
 
     private boolean isFirst = true;
-    boolean isInt = false;  //用于判断输入的关卡是否为整数
-    private int mStage; //接收输入的关卡
 
-    private ImageView ivMore;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private RefreshItemAdapter refreshItemAdapter;
-    private Button btAdd;
+    private TextView tvCount;
 
     private DataHelper dataHelper;
     public ArrayList<DataBean> dataBeanList;
-
-    private AddPopup addPopup;
 
     @NonNull
     public static ChildFragment create(String databaseName, String tapName) {
@@ -110,17 +101,9 @@ public class ChildFragment extends Fragment {
             dataBaseName = bundle.getString(dataBaseNameTag);
         }
 
-        TextView tvTitle = rootView.findViewById(R.id.tv_title);
-        ivMore = rootView.findViewById(R.id.iv_more);
         swipeRefreshLayout = rootView.findViewById(R.id.id_swipe_Layout);
         recyclerView = rootView.findViewById(R.id.recycler_view);
-        btAdd = rootView.findViewById(R.id.bt_add);
-
-        if (status.equals("tap_woman")) {
-            tvTitle.setText(R.string.change_item_woman);
-        } else {
-            tvTitle.setText(R.string.change_item_man);
-        }
+        tvCount = rootView.findViewById(R.id.tv_count);
     }
 
     @Override
@@ -129,17 +112,6 @@ public class ChildFragment extends Fragment {
 
         if (isFirst) {
             isFirst = false;
-
-            PopupMenu popupMenu = new PopupMenu(context, ivMore);
-            popupMenu.getMenuInflater().inflate(R.menu.change_item, popupMenu.getMenu());
-            popupMenu.setOnMenuItemClickListener(menuItem -> {
-                if (menuItem.getItemId() == R.id.item_stage) {
-                    countStageDialog();
-                } else if (menuItem.getItemId() == R.id.item_level) {
-                    countLevelDialog();
-                }
-                return true;
-            });
 
             DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
             defaultItemAnimator.setAddDuration(260);
@@ -151,18 +123,6 @@ public class ChildFragment extends Fragment {
                 setData(true);
             });
 
-            ivMore.setOnClickListener(view -> popupMenu.show());
-
-            btAdd.setOnClickListener(view -> addDialog());
-
-            addPopup = new AddPopup(context, status);
-            addPopup.setOnConfirmClick((tapName, tapAttack, tapCost) -> {
-                dataHelper.insertInto(status, tapName, tapAttack, tapCost);
-                ToastUtils.showShort("添加成功");
-                dataBeanList.add(new DataBean(tapName, tapAttack, tapCost));
-                refreshItemAdapter.notifyItemInserted(dataBeanList.size() - 1);
-            });
-
             dataHelper = new DataHelper(context, dataBaseName, null, 1);
 
             setData(true);
@@ -170,6 +130,13 @@ public class ChildFragment extends Fragment {
             setData(false);
         }
 
+    }
+
+    public void onConfirmClick(String tapName, String tapAttack, String tapCost){
+        dataHelper.insertInto(status, tapName, tapAttack, tapCost);
+        ToastUtils.showShort("添加成功");
+        dataBeanList.add(new DataBean(tapName, tapAttack, tapCost));
+        refreshItemAdapter.notifyItemInserted(dataBeanList.size() - 1);
     }
 
     public void setData(boolean playAnim) {
@@ -202,16 +169,11 @@ public class ChildFragment extends Fragment {
             recyclerView.setLayoutAnimation(layoutAnimationController);
         }
 
-        setBtAddText();
+        setCountText();
 
         if (refreshItemAdapter.getItemCount() == 0) {
             ToastUtils.showShort("无数据，请添加");
         }
-
-    }
-
-    public void addDialog() {
-        new XPopup.Builder(getContext()).asCustom(addPopup).show();
     }
 
     public void deleteDialog(int position, String strName, String strAttack) {
@@ -220,75 +182,17 @@ public class ChildFragment extends Fragment {
             ToastUtils.showShort("删除成功");
             dataBeanList.remove(position);
             refreshItemAdapter.notifyItemRemoved(position);
-            setBtAddText();
+            setCountText();
         }).show();
     }
 
-    //计算关卡
-    private void countStageDialog() {
-        new XPopup.Builder(getContext())
-                .asInputConfirm("计算关卡", "请输入当前关卡", null, null, text -> {
-                    try {
-                        mStage = Integer.parseInt(text);
-                        isInt = true;
-                    } catch (Exception e) {
-                        ToastUtils.showShort("请输入整数");
-                        isInt = false;
-                    }
-                    if (mStage < 90) {
-                        ToastUtils.showShort("请完成90关卡后再进行计算");
-                    } else if (isInt) {
-                        int c = (mStage - 90) / 15 + 1;
-                        int d = 15 - (mStage - 90) % 15;
-                        msgDialog(c, d, "关卡");
-                    }
-                }, null, R.layout.popup_center_impl_confirm).show();
-    }
-
-    //计算等级
-    private void countLevelDialog() {
-        new XPopup.Builder(getContext())
-                .asInputConfirm("计算等级", "请输入当前等级", null, null, text -> {
-                    int mLevel;
-                    try {
-                        mLevel = Integer.parseInt(text);
-                        isInt = true;
-                    } catch (Exception e) {
-                        ToastUtils.showShort("请输入整数");
-                        isInt = false;
-                        return;
-                    }
-
-                    if (mLevel < 500) {
-                        ToastUtils.showShort("请达到500级后再进行计算");
-                    } else {
-                        int c = (mLevel - 500) / 1000 + 1;
-                        int d = 1000 - (mLevel - 500) % 1000;
-                        msgDialog(c, d, "级");
-                    }
-                }, null, R.layout.popup_center_impl_confirm).show();
-    }
-
-    public void msgDialog(final int i, final int j, final String s) {
-        String title = "蜕变量";
-        String msg = "当前的蜕变级别为: " + i + " ,还需" + j + s + "满足下一要求";
-        new XPopup.Builder(getContext()).asConfirm(title, msg, "", "确认", null, null, true).show();
-    }
-
-    private void setBtAddText() {
-        if (ObjectUtils.isNotEmpty(btAdd)) {
-            String addText;
-
-            if (status.equals("tap_man")) {
-                addText = "男主添加";
-            } else {
-                addText = "女主添加";
-            }
-
+    private void setCountText() {
+        if (ObjectUtils.isNotEmpty(tvCount)) {
+            String addText = "";
             if (!dataBeanList.isEmpty()) {
-                addText = addText + "(" + dataBeanList.size() + "个)";
+                addText = "共" + dataBeanList.size() + "个";
             }
-            btAdd.setText(addText);
+            tvCount.setText(addText);
         }
     }
 
