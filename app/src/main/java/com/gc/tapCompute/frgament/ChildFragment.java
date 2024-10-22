@@ -137,6 +137,7 @@ public class ChildFragment extends Fragment {
         ToastUtils.showShort("添加成功");
         dataBeanList.add(new DataBean(tapName, tapAttack, tapCost));
         refreshItemAdapter.notifyItemInserted(dataBeanList.size() - 1);
+        setCountText();
     }
 
     public void setData(boolean playAnim) {
