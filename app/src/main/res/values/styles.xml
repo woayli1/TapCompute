@@ -5,13 +5,10 @@
         <item name="colorPrimary">@color/colorWhite</item>
         <item name="colorPrimaryDark">@color/colorBlack</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:colorBackground">@color/colorWhite</item>
         <item name="android:navigationBarColor">@color/colorWhite</item>
         <item name="android:statusBarColor">@color/colorWhite</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>
-    </style>
-
-    <style name="WelcomeTheme" parent="AppTheme">
-        <item name="android:background">@color/colorWhite</item>
     </style>
 
 </resources>
