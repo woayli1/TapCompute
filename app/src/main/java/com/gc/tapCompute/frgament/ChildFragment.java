@@ -133,6 +133,11 @@ public class ChildFragment extends Fragment {
     }
 
     public void onConfirmClick(String tapName, String tapAttack, String tapCost) {
+        boolean exist = dataHelper.isExist(status, tapName);
+        if (exist) {
+            ToastUtils.showShort(tapName + " 已存在");
+            return;
+        }
         dataHelper.insertInto(status, tapName, tapAttack, tapCost);
         ToastUtils.showShort("添加成功");
         dataBeanList.add(new DataBean(tapName, tapAttack, tapCost));
@@ -152,11 +157,8 @@ public class ChildFragment extends Fragment {
         }
 
         refreshItemAdapter = new RefreshItemAdapter(context, dataBeanList);
-        refreshItemAdapter.setOnItemClickListener((position, itemId) -> {
-            String strName = refreshItemAdapter.getDate().get(position).getName();
-            String strAttack = refreshItemAdapter.getDate().get(position).getAttack();
-            deleteDialog(position, strName, strAttack);
-        });
+        refreshItemAdapter.setOnItemClickListener((position, itemId) -> deleteDialog(position, refreshItemAdapter
+                .getDate().get(position).getName()));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(refreshItemAdapter);
 
@@ -177,11 +179,14 @@ public class ChildFragment extends Fragment {
         }
     }
 
-    public void deleteDialog(int position, String strName, String strAttack) {
+    public void deleteDialog(int position, String strName) {
         new XPopup.Builder(getContext()).asConfirm(strName, "确认删除吗？", () -> {
-            dataHelper.delete(status, strName, strAttack);
+            dataHelper.delete(status, strName);
             ToastUtils.showShort("删除成功");
-            dataBeanList.remove(position);
+
+            if (dataBeanList.size() > position) {
+                dataBeanList.remove(position);
+            }
             refreshItemAdapter.notifyItemRemoved(position);
             setCountText();
         }).show();

@@ -12,6 +12,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.blankj.utilcode.util.BarUtils;
+import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.gc.tapCompute.frgament.ChildFragment;
@@ -28,6 +29,7 @@ public class MainActivity extends FragmentActivity {
     private TextView tvTitle;
     private ImageView ivMore;
 
+    private AttachPopupView attachPopupView;
     private ChildFragment tapMan, tapWoman;
 
     //当前页面位置
@@ -90,34 +92,40 @@ public class MainActivity extends FragmentActivity {
         BarUtils.setNavBarLightMode(getWindow(), !isNight);
         BarUtils.setStatusBarLightMode(getWindow(), !isNight);
 
-        AttachPopupView attachPopupView = new XPopup.Builder(this)
-                .hasStatusBarShadow(false)
+        ivMore.setOnClickListener(view -> {
+            if (ObjectUtils.isEmpty(attachPopupView)) {
+
+                attachPopupView = new XPopup.Builder(this)
+                        .hasStatusBarShadow(false)
 //                        .isRequestFocus(false)
-                .isCoverSoftInput(true)
-                .hasShadowBg(false)
-                .isDarkTheme(isNight)
-                .atView(ivMore)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
-                .asAttachList(new String[]{getResources().getString(R.string.change_item_calculate_levels),
-                                getResources().getString(R.string.change_item_calculate_level),
-                                getResources().getString(R.string.change_item_calculate_addItem),
-                        },
-                        new int[]{},
-                        (position, text) -> {
-                            if (viewPager.getScrollState() == ViewPager2.SCROLL_STATE_DRAGGING) {
-                                ToastUtils.showShort("正在滑动，无法弹窗");
-                                return;
-                            }
+                        .isCoverSoftInput(true)
+                        .hasShadowBg(false)
+                        .isDarkTheme(isNight)
+                        .offsetX(45)
+                        .atView(ivMore)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
+                        .asAttachList(new String[]{getResources().getString(R.string.change_item_calculate_levels),
+                                        getResources().getString(R.string.change_item_calculate_level),
+                                        getResources().getString(R.string.change_item_calculate_addItem),
+                                },
+                                new int[]{},
+                                (position, text) -> {
+                                    if (viewPager.getScrollState() == ViewPager2.SCROLL_STATE_DRAGGING) {
+                                        ToastUtils.showShort("正在滑动，无法弹窗");
+                                        return;
+                                    }
 
-                            if (position == 0) {
-                                countStageDialog();
-                            } else if (position == 1) {
-                                countLevelDialog();
-                            } else if (position == 2) {
-                                addDialog();
-                            }
-                        }, 0, 0/*, Gravity.LEFT*/);
+                                    if (position == 0) {
+                                        countStageDialog();
+                                    } else if (position == 1) {
+                                        countLevelDialog();
+                                    } else if (position == 2) {
+                                        addDialog();
+                                    }
+                                }, 0, 0/*, Gravity.LEFT*/);
+            }
 
-        ivMore.setOnClickListener(view -> attachPopupView.show());
+            attachPopupView.show();
+        });
     }
 
     public void addDialog() {

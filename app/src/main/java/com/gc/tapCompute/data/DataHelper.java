@@ -56,9 +56,18 @@ public class DataHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void delete(String table_name, String tap_name, String tap_atc) {
+    public boolean isExist(String table_name, String tap_name) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM '" + table_name + "' where tap_name = '" + tap_name + "';", null);
+        boolean exist = cursor.getCount() > 0;
+        cursor.close();
+        db.close();
+        return exist;
+    }
+
+    public void delete(String table_name, String tap_name) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + table_name + " WHERE " + TAP_NAME + " = '" + tap_name + "' AND " + TAP_ATTACK + " = '" + tap_atc + "';");
+        db.execSQL("DELETE FROM " + table_name + " WHERE " + TAP_NAME + " = '" + tap_name + "';");
         db.close();
     }
 }

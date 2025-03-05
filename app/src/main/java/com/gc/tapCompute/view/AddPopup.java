@@ -75,7 +75,8 @@ public class AddPopup extends CenterPopupView {
             String tapName = etName.getSelectedItem().toString();
             String tapAttack = etAttack.getText().toString();
             String tapCost = etCost.getText().toString();
-            if (tapName.trim().isEmpty() || tapCost.trim().isEmpty() || tapAttack.trim().equals(".") || tapCost.trim().equals(".")) {
+            if (tapName.trim().isEmpty() || tapCost.trim().isEmpty() || tapCost.trim()
+                    .equals(".") || tapAttack.trim().isEmpty() || tapAttack.trim().equals(".")) {
                 ToastUtils.showShort("请输入具体数据");
             } else if (ObjectUtils.isNotEmpty(mPopupBackData)) {
                 mPopupBackData.onConfirmClick(tapName, tapAttack, tapCost);
