@@ -15,6 +15,7 @@ import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.gc.tapCompute.data.DataHelper;
 import com.gc.tapCompute.frgament.ChildFragment;
 import com.gc.tapCompute.view.AddPopup;
 import com.lxj.xpopup.XPopup;
@@ -24,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends FragmentActivity {
 
-    private static final String dataBaseName = "TapCompute";
 
     private TextView tvTitle;
     private ImageView ivMore;
@@ -208,10 +208,10 @@ public class MainActivity extends FragmentActivity {
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) {
-                tapMan = ChildFragment.create(dataBaseName, "tap_man");
+                tapMan = ChildFragment.create(DataHelper.DATA_BASE_NAME, DataHelper.TABLE_NAME_MAN);
                 return tapMan;
             }
-            tapWoman = ChildFragment.create(dataBaseName, "tap_woman");
+            tapWoman = ChildFragment.create(DataHelper.DATA_BASE_NAME, DataHelper.TABLE_NAME_WOMAN);
             return tapWoman;
         }
 

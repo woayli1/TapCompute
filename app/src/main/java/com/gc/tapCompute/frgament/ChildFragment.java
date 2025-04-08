@@ -45,10 +45,10 @@ public class ChildFragment extends Fragment {
      * tap_man 男主
      * tap_woman 女主
      */
-    public String status = "tap_man";
+    public String status = DataHelper.TABLE_NAME_MAN;
     public static String statusTag = "tapName";
 
-    private String dataBaseName = "TapCompute";
+    private String dataBaseName = DataHelper.DATA_BASE_NAME;
     private static final String dataBaseNameTag = "Tap_Compute";
 
     private boolean isFirst = true;
@@ -147,9 +147,9 @@ public class ChildFragment extends Fragment {
 
     public void setData(boolean playAnim) {
         dataBeanList = new ArrayList<>();
-        ArrayList<String> itemsName = dataHelper.getSelectStringItem(status, "tap_name");
-        ArrayList<String> itemsAttack = dataHelper.getSelectStringItem(status, "tap_attack");
-        ArrayList<String> itemsCost = dataHelper.getSelectStringItem(status, "tap_cost");
+        ArrayList<String> itemsName = dataHelper.getSelectStringItem(status, DataHelper.TAP_NAME);
+        ArrayList<String> itemsAttack = dataHelper.getSelectStringItem(status, DataHelper.TAP_ATTACK);
+        ArrayList<String> itemsCost = dataHelper.getSelectStringItem(status, DataHelper.TAP_COST);
 
         for (int i = 0; i < itemsName.size(); i++) {
             DataBean dataBean = new DataBean(itemsName.get(i), itemsAttack.get(i), itemsCost.get(i));

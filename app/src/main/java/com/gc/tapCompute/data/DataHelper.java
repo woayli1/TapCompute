@@ -13,12 +13,14 @@ import java.util.ArrayList;
 
 public class DataHelper extends SQLiteOpenHelper {
 
-    private static final String TAP_NAME = "tap_name";
-    private static final String TAP_ATTACK = "tap_attack";
-    private static final String TAP_COST = "tap_cost";
+    public static final String DATA_BASE_NAME = "TapCompute";
 
-    private static final String TABLE_NAME_MAN = "tap_man";
-    private static final String TABLE_NAME_WOMAN = "tap_woman";
+    public static final String TABLE_NAME_MAN = "tap_man";
+    public static final String TABLE_NAME_WOMAN = "tap_woman";
+
+    public static final String TAP_NAME = "tap_name";
+    public static final String TAP_ATTACK = "tap_attack";
+    public static final String TAP_COST = "tap_cost";
 
     public DataHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
